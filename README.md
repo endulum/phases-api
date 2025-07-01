@@ -1,6 +1,8 @@
-# [Project Name] - API
+# Phases - API
 
-This the server application for [Project Name], exposing an API for managing [Project Name]'s users and data.
+**Phases** is a shift marketplace, connecting workplaces with workers to provide manage, and complete work shifts.
+
+This the server application for Phases, exposing an API for managing Phases' users and data.
 
 ## Getting started
 
