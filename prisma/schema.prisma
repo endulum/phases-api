@@ -11,5 +11,100 @@ model User {
   id Int @id @default(autoincrement())
   username String @unique
   password String
-  joined DateTime @default(now())
+  created DateTime @default(now())
+  role Role?
+
+  workplaceProfile WorkplaceProfile?
+  workerProfile WorkerProfile?
+}
+
+enum Role {
+  WORKPLACE
+  WORKER
+}
+
+model WorkplaceProfile {
+  id String @id @default(uuid())
+  company_name String @unique
+  phone String
+  email String
+
+  userId Int @unique
+  user User @relation(fields: [userId], references: [id])
+  locationId String
+  location MoonLocation @relation(fields: [locationId], references: [id])
+  shifts Shift[]
+}
+
+model WorkerProfile {
+  id String @id @default(uuid())
+  first_name String
+  last_name String
+  phone String
+  email String
+
+  userId Int @unique
+  user User @relation(fields: [userId], references: [id])
+  locationId String
+  location MoonLocation @relation(fields: [locationId], references: [id])
+  shiftParticipation ShiftParticipation[]
+  skills Skill[]
+}
+
+model Shift {
+  id String @id @default(uuid())
+  title String
+  description String
+  created DateTime @default(now())
+  open Boolean
+  starts_at DateTime
+  ends_at DateTime
+  minimum_workers Int @default(1)
+  maximum_workers Int?
+
+  workplaceId String
+  workplace WorkplaceProfile @relation(fields: [workplaceId], references: [id])
+  locationId String
+  location MoonLocation @relation(fields: [locationId], references: [id])
+  shiftParticipation ShiftParticipation[]
+  skills Skill[]
+}
+
+model ShiftParticipation {
+  id String @id @default(uuid())
+  status ShiftStatus
+  comment String?
+
+  workerId String
+  worker WorkerProfile @relation(fields: [workerId], references: [id])
+  ShiftId String
+  Shift Shift @relation(fields: [ShiftId], references: [id])
+}
+
+enum ShiftStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  CANCELLED
+  COMPLETED
+  INCOMPLETE
+}
+
+model Skill {
+  id String @id @default(uuid())
+  name String @unique
+
+  workers WorkerProfile[]
+  shifts Shift[]
+}
+
+model MoonLocation {
+  id String @id @default(uuid())
+  name String
+  seleno_lat Float
+  seleno_lon Float
+
+  workplaces WorkplaceProfile[]
+  workers WorkerProfile[]
+  shifts Shift[]
 }
