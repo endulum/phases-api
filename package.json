@@ -11,7 +11,7 @@
     "fmt": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "db:test:migrate": "rm -f ./prisma/test.db && dotenv -e .env.test -- npx prisma migrate reset --force --skip-seed",
     "db:dev:init": "dotenv -e .env.development -- npx prisma migrate dev --name init",
-    "db:dev:reseed": "dotenv -e .env.development -- npx prisma migrate reset",
+    "db:dev:reseed": "rm -f ./prisma/dev.db && dotenv -e .env.development -- npx prisma migrate reset",
     "db:prod:migrate": "dotenv -e .env.production -- npx prisma migrate deploy",
     "test:e2e": "dotenv -e .env.test -- jest --watch --config ./test/jest-e2e.json",
     "test": "npm run db:test:migrate && clear && npm run test:e2e",
