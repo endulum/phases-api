@@ -9,12 +9,15 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
   }
 
   async clear() {
-    for (const query of [
-      'PRAGMA foreign_keys = ON',
-      'DELETE FROM "User"',
-      "DELETE FROM sqlite_sequence WHERE name = 'User'",
-    ])
-      await this.$queryRaw`${Prisma.raw(query)}`;
+    await this.$queryRaw`PRAGMA foreign_keys = ON`;
+    const allTables: { name: string }[] = await this.$queryRaw`
+      SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%';
+    `;
+    for (const table of allTables) {
+      if (table.name === '_prisma_migrations') continue;
+      await this.$executeRawUnsafe(`DELETE FROM "${table.name}"`);
+    }
+    await this.$queryRaw`DELETE FROM sqlite_sequence`;
   }
 
   async createUser(data: Prisma.UserCreateInput) {

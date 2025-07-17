@@ -5,6 +5,7 @@ export const getSchema = z.object({
     user: z.object({
       id: z.number(),
       username: z.string(),
+      role: z.enum(['WORKER', 'WORKPLACE']).nullable(),
     }),
   }),
 });

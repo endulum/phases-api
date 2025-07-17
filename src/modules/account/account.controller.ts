@@ -47,6 +47,7 @@ export class AccountController {
         user: {
           id: user.id,
           username: user.username,
+          role: user.role,
         },
       },
     };
